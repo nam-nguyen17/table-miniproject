@@ -1,15 +1,36 @@
-import React from "react";
-import Table from "../../components/table/Table";
+import React, { useState, useEffect } from "react";
+import UserListTable from "./components/UserListTable";
 
 const UserTable: React.FC = () => {
-  const headers = ["Name", "Email", "Role"];
-  const userData = [
-    { Name: "John Doe", Email: "john@example.com", Role: "Admin" },
-    { Name: "Jane Smith", Email: "jane@example.com", Role: "User" },
-    // Add more data as needed
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = () => {
+    fetch("./data/users_data.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setUsers(data);
+      });
+  };
+
+  const headers = [
+    "customer_id",
+    "first_name",
+    "last_name",
+    "age",
+    "email",
+    "favorite_color",
+    "phone_number",
   ];
 
-  return <Table headers={headers} data={userData} />;
+  return (
+    <div>
+      <UserListTable headers={headers} data={users} />
+    </div>
+  );
 };
 
 export default UserTable;

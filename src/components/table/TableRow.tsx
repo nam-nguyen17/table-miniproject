@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./styles.module.scss";
 
 interface TableRowProps {
   rowData: any;
@@ -7,7 +8,7 @@ interface TableRowProps {
 
 const TableRow: React.FC<TableRowProps> = ({ rowData, headers }) => {
   return (
-    <tr>
+    <tr className={styles.table__row}>
       {headers.map((header, idx) => (
         <td key={idx}>{rowData[header]}</td>
       ))}

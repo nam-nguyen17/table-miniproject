@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./styles.module.scss";
 
 interface TableHeaderProps {
   headers: string[];
@@ -6,7 +7,7 @@ interface TableHeaderProps {
 
 const TableHeader: React.FC<TableHeaderProps> = ({ headers }) => {
   return (
-    <thead>
+    <thead className={styles.table__header}>
       <tr>
         {headers.map((header, index) => (
           <th key={index}>{header}</th>

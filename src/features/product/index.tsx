@@ -1,15 +1,30 @@
-import React from "react";
-import Table from "../../components/table/Table";
+import React, { useState, useEffect } from "react";
+import ProductListTable from "./components/ProductListTable";
 
 const ProductTable: React.FC = () => {
-  const headers = ["Name", "Price", "Stock"];
-  const productData = [
-    { Name: "Product A", Price: "$10", Stock: 50 },
-    { Name: "Product B", Price: "$20", Stock: 30 },
-    // Add more data as needed
-  ];
+  const [products, setProducts] = useState([]);
 
-  return <Table headers={headers} data={productData} />;
+  useEffect(() => {
+    fetchProductData();
+  });
+
+  const fetchProductData = () => {
+    fetch("./data/products_data.json")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setProducts(data);
+      });
+  };
+
+  const headers = ["product_name", "category", "barcode", "price"];
+
+  return (
+    <div>
+      <ProductListTable headers={headers} data={products} />
+    </div>
+  );
 };
 
 export default ProductTable;

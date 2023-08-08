@@ -1,6 +1,7 @@
 import React from "react";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
+import styles from "./styles.module.scss";
 
 interface TableProps {
   headers: string[];
@@ -9,7 +10,7 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ headers, data }) => {
   return (
-    <table>
+    <table className={styles.table}>
       <TableHeader headers={headers} />
       <TableBody data={data} headers={headers} />
     </table>
