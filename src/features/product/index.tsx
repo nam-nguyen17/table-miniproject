@@ -7,7 +7,7 @@ import { Product } from "../../_types_";
 
 const PageSize = 10;
 
-const headers = [
+const originalHeaders = [
   "product_id",
   "product_name",
   "category",
@@ -15,6 +15,15 @@ const headers = [
   "quantity",
   "price",
 ];
+
+const headerMapping = {
+  product_id: "Product ID",
+  product_name: "Product Name",
+  category: "Category",
+  expiration_date: "Expiration Date",
+  quantity: "Quantity",
+  price: "Price",
+};
 
 const ProductTable: React.FC = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
@@ -55,7 +64,11 @@ const ProductTable: React.FC = () => {
   return (
     <div>
       <SearchBar onSearch={(query) => setSearchQuery(query)} />
-      <Table headers={headers} data={currentTableData} />
+      <Table
+        headers={originalHeaders}
+        data={currentTableData}
+        headerMapping={headerMapping}
+      />
       <Pagination
         className={`${styles.pagination_bar}`}
         currentPage={currentPage}

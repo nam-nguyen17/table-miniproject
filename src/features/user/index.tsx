@@ -7,7 +7,7 @@ import { User } from "../../_types_";
 
 let PageSize = 10;
 
-const headers = [
+const originalHeaders = [
   "customer_id",
   "first_name",
   "last_name",
@@ -16,6 +16,16 @@ const headers = [
   "favorite_color",
   "phone_number",
 ];
+
+const headerMapping = {
+  customer_id: "Customer ID",
+  first_name: "First Name",
+  last_name: "Last Name",
+  age: "Age",
+  email: "Email",
+  favorite_color: "Favorite Color",
+  phone_number: "Phone Number",
+};
 
 const UserTable: React.FC = () => {
   const [usersData, setUsersData] = useState<User[]>([]);
@@ -79,13 +89,13 @@ const UserTable: React.FC = () => {
     <div>
       <SearchBar onSearch={(query) => setSearchQuery(query)} />
       <table className={styles.table}>
-        <TableHeader headers={headers} />
+        <TableHeader headers={originalHeaders} headerMapping={headerMapping} />
         <tbody
           id="infinite-table"
           className={styles.table__body}
           onScroll={handleScroll}>
           {tableData.map((item, index) => (
-            <TableRow key={index} rowData={item} headers={headers} />
+            <TableRow key={index} rowData={item} headers={originalHeaders} />
           ))}
         </tbody>
       </table>
