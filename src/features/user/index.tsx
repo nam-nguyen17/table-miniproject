@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import TableRow from "../../components/table/TableRow";
 import styles from "../../components/table/styles.module.scss";
 import TableHeader from "../../components/table/TableHeader";
+import SearchBar from "../../components/search/SearchBar";
+import { User } from "../../_types_";
 
 let PageSize = 10;
 
@@ -16,14 +18,15 @@ const headers = [
 ];
 
 const UserTable: React.FC = () => {
-  const [usersData, setUsersData] = useState([]);
+  const [usersData, setUsersData] = useState<User[]>([]);
+  const [tableData, setTableData] = useState<User[]>([]);
   const [pageIndex, setPageIndex] = useState(1);
-  const [tableData, setTableData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchUserData = async () => {
     try {
       const response = await fetch("./data/users_data.json");
-      const data = await response.json();
+      const data: User[] = await response.json();
 
       setUsersData(data);
     } catch (error) {
@@ -35,17 +38,30 @@ const UserTable: React.FC = () => {
     fetchUserData();
   }, []);
 
+  // filteredData is the data that is filtered by the search query
+  const filteredData = useMemo(() => {
+    if (!searchQuery) {
+      return usersData;
+    }
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return usersData.filter(
+      (user) =>
+        user.first_name.toLowerCase().includes(lowerCaseQuery) ||
+        user.last_name.toLowerCase().includes(lowerCaseQuery)
+    );
+  }, [searchQuery, usersData]);
+
   // previousTableData is the data that is rendered before the current page
   const previousTableData = useMemo(() => {
     const firstPageIndex = (pageIndex - 1) * PageSize;
-    return usersData.slice(0, firstPageIndex);
-  }, [pageIndex, usersData]);
+    return filteredData.slice(0, firstPageIndex);
+  }, [pageIndex, filteredData]);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (pageIndex - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return usersData.slice(firstPageIndex, lastPageIndex);
-  }, [pageIndex, usersData]);
+    return filteredData.slice(firstPageIndex, lastPageIndex);
+  }, [pageIndex, filteredData]);
 
   useEffect(() => {
     setTableData([...previousTableData, ...currentTableData]);
@@ -60,17 +76,20 @@ const UserTable: React.FC = () => {
   };
 
   return (
-    <table className={styles.table}>
-      <TableHeader headers={headers} />
-      <tbody
-        id="infinite-table"
-        className={styles.table__body}
-        onScroll={handleScroll}>
-        {tableData.map((item, index) => (
-          <TableRow key={index} rowData={item} headers={headers} />
-        ))}
-      </tbody>
-    </table>
+    <div>
+      <SearchBar onSearch={(query) => setSearchQuery(query)} />
+      <table className={styles.table}>
+        <TableHeader headers={headers} />
+        <tbody
+          id="infinite-table"
+          className={styles.table__body}
+          onScroll={handleScroll}>
+          {tableData.map((item, index) => (
+            <TableRow key={index} rowData={item} headers={headers} />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
