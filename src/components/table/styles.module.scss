@@ -21,6 +21,10 @@
   &__row td {
     border: 1px solid #ccc;
     padding: 8px;
+    overflow: hidden;
+    align-content: center;
+    text-align: center;
+    vertical-align: middle;
 
     &:nth-child(even) {
       background-color: #f2f2f2;

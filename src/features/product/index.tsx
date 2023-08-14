@@ -10,22 +10,19 @@ const ProductTable: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // const [isLoading, setIsLoading] = useState(true);
 
+  const fetchProductData = async () => {
+    try {
+      const response = await fetch("./data/products_data.json");
+      const data = await response.json();
+      setProductsData(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProductData();
   }, []);
-
-  const fetchProductData = () => {
-    // let flag = true;
-    fetch("./data/products_data.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setProductsData(data);
-        // setIsLoading(false);
-        // flag = false;
-      });
-  };
 
   const headers = [
     "product_id",
