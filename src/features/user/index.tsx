@@ -4,6 +4,7 @@ import styles from "../../components/table/styles.module.scss";
 import TableHeader from "../../components/table/TableHeader";
 import SearchBar from "../../components/search/SearchBar";
 import { User } from "../../_types_";
+import { useSortableTable } from "../../hooks/useSortableTable";
 
 let PageSize = 10;
 
@@ -32,6 +33,8 @@ const UserTable: React.FC = () => {
   const [tableData, setTableData] = useState<User[]>([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState<keyof User | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const fetchUserData = async () => {
     try {
@@ -85,16 +88,30 @@ const UserTable: React.FC = () => {
     }
   };
 
+  // sort the data
+  const sortedData = useSortableTable<User>(tableData, sortColumn, sortOrder);
+
+  const sortUsers = (column: keyof User) => {
+    setSortColumn(column);
+    setSortOrder(sortColumn === column && sortOrder === "asc" ? "desc" : "asc");
+  };
+
   return (
     <div>
       <SearchBar onSearch={(query) => setSearchQuery(query)} />
       <table className={styles.table}>
-        <TableHeader headers={originalHeaders} headerMapping={headerMapping} />
+        <TableHeader
+          headers={originalHeaders}
+          headerMapping={headerMapping}
+          sortColumn={sortColumn}
+          sortOrder={sortOrder}
+          onSort={sortUsers}
+        />
         <tbody
           id="infinite-table"
           className={styles.table__body}
           onScroll={handleScroll}>
-          {tableData.map((item, index) => (
+          {sortedData.map((item, index) => (
             <TableRow key={index} rowData={item} headers={originalHeaders} />
           ))}
         </tbody>
