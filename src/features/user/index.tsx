@@ -60,7 +60,10 @@ const UserTable: React.FC = () => {
     return usersData.filter(
       (user) =>
         user.first_name.toLowerCase().includes(lowerCaseQuery) ||
-        user.last_name.toLowerCase().includes(lowerCaseQuery)
+        user.last_name.toLowerCase().includes(lowerCaseQuery) ||
+        user.email.toLowerCase().includes(lowerCaseQuery) ||
+        user.favorite_color.toLowerCase().includes(lowerCaseQuery) ||
+        user.phone_number.toLowerCase().includes(lowerCaseQuery)
     );
   }, [searchQuery, usersData]);
 
