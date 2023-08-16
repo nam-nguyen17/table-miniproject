@@ -1,30 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
-import Table from "../../components/table/Table";
-import Pagination from "./components/Pagination";
-import styles from "./components/styles.module.scss";
-import SearchBar from "../../components/search/SearchBar";
+import React, { useEffect, useMemo, useState } from "react";
 import { Product } from "../../_types_";
+import SearchBar from "../../components/search/SearchBar";
+import Table from "../../components/table/Table";
 import { useSortableTable } from "../../hooks/useSortableTable";
-
-const PageSize = 10;
-
-const originalHeaders = [
-  "product_id",
-  "product_name",
-  "category",
-  "expiration_date",
-  "quantity",
-  "price",
-];
-
-const headerMapping = {
-  product_id: "Product ID",
-  product_name: "Product Name",
-  category: "Category",
-  expiration_date: "Expiration Date",
-  quantity: "Quantity",
-  price: "Price",
-};
+import { fetchData, filterData } from "../../utils/helpers";
+import Pagination from "./Pagination";
+import {
+  headerProductMapping,
+  PageSize,
+  ProductHeader,
+} from "../../utils/constants";
 
 const ProductTable: React.FC = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
@@ -34,13 +19,8 @@ const ProductTable: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const fetchProductData = async () => {
-    try {
-      const response = await fetch("./data/products_data.json");
-      const data: Product[] = await response.json();
-      setProductsData(data);
-    } catch (error) {
-      console.error("Error fetching product data:", error);
-    }
+    const data = await fetchData<Product>("./data/products_data.json");
+    setProductsData(data);
   };
 
   useEffect(() => {
@@ -49,26 +29,23 @@ const ProductTable: React.FC = () => {
 
   // filteredData is the data that is filtered by the search query
   const filteredData = useMemo(() => {
-    if (!searchQuery) {
-      return productsData;
-    }
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    return productsData.filter(
-      (product) =>
-        product.product_name.toLowerCase().includes(lowerCaseQuery) ||
-        product.category.toLowerCase().includes(lowerCaseQuery) ||
-        product.expiration_date.toLowerCase().includes(lowerCaseQuery) ||
-        product.quantity.toString().includes(lowerCaseQuery) ||
-        product.price.toString().includes(lowerCaseQuery)
-    );
+    return filterData<Product>(productsData, searchQuery, [
+      ProductHeader.ProductName,
+      ProductHeader.Category,
+      ProductHeader.ExpirationDate,
+      ProductHeader.Quantity,
+      ProductHeader.Price,
+    ]);
   }, [searchQuery, productsData]);
 
+  // currentTableData is the data that is sorted and paginated
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return filteredData.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, filteredData]);
 
+  // sortedData is the data that is sorted
   const sortedData = useSortableTable<Product>(
     currentTableData,
     sortColumn,
@@ -84,15 +61,14 @@ const ProductTable: React.FC = () => {
     <div>
       <SearchBar onSearch={(query) => setSearchQuery(query)} />
       <Table
-        headers={originalHeaders}
+        headers={Object.values(ProductHeader)}
         data={sortedData}
-        headerMapping={headerMapping}
+        headerMapping={headerProductMapping}
         sortColumn={sortColumn}
         sortOrder={sortOrder}
         onSort={sortProducts}
       />
       <Pagination
-        className={`${styles.pagination_bar}`}
         currentPage={currentPage}
         totalCount={filteredData.length}
         pageSize={PageSize}

@@ -1,32 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { User } from "../../_types_";
+import SearchBar from "../../components/search/SearchBar";
+import TableHeader from "../../components/table/TableHeader";
 import TableRow from "../../components/table/TableRow";
 import styles from "../../components/table/styles.module.scss";
-import TableHeader from "../../components/table/TableHeader";
-import SearchBar from "../../components/search/SearchBar";
-import { User } from "../../_types_";
 import { useSortableTable } from "../../hooks/useSortableTable";
-
-const PageSize = 10;
-
-const originalHeaders = [
-  "customer_id",
-  "first_name",
-  "last_name",
-  "age",
-  "email",
-  "favorite_color",
-  "phone_number",
-];
-
-const headerMapping = {
-  customer_id: "Customer ID",
-  first_name: "First Name",
-  last_name: "Last Name",
-  age: "Age",
-  email: "Email",
-  favorite_color: "Favorite Color",
-  phone_number: "Phone Number",
-};
+import { fetchData, filterData } from "../../utils/helpers";
+import { headerUserMapping, PageSize, UserHeader } from "../../utils/constants";
 
 const UserTable: React.FC = () => {
   const [usersData, setUsersData] = useState<User[]>([]);
@@ -36,15 +16,10 @@ const UserTable: React.FC = () => {
   const [sortColumn, setSortColumn] = useState<keyof User | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  console.log(headerUserMapping);
   const fetchUserData = async () => {
-    try {
-      const response = await fetch("./data/users_data.json");
-      const data: User[] = await response.json();
-
-      setUsersData(data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
+    const data = await fetchData<User>("./data/users_data.json");
+    setUsersData(data);
   };
 
   useEffect(() => {
@@ -53,18 +28,13 @@ const UserTable: React.FC = () => {
 
   // filteredData is the data that is filtered by the search query
   const filteredData = useMemo(() => {
-    if (!searchQuery) {
-      return usersData;
-    }
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    return usersData.filter(
-      (user) =>
-        user.first_name.toLowerCase().includes(lowerCaseQuery) ||
-        user.last_name.toLowerCase().includes(lowerCaseQuery) ||
-        user.email.toLowerCase().includes(lowerCaseQuery) ||
-        user.favorite_color.toLowerCase().includes(lowerCaseQuery) ||
-        user.phone_number.toLowerCase().includes(lowerCaseQuery)
-    );
+    return filterData<User>(usersData, searchQuery, [
+      UserHeader.FirstName,
+      UserHeader.LastName,
+      UserHeader.Email,
+      UserHeader.FavoriteColor,
+      UserHeader.PhoneNumber,
+    ]);
   }, [searchQuery, usersData]);
 
   // previousTableData is the data that is rendered before the current page
@@ -73,6 +43,7 @@ const UserTable: React.FC = () => {
     return filteredData.slice(0, firstPageIndex);
   }, [pageIndex, filteredData]);
 
+  // currentTableData is the data that is rendered on the current page
   const currentTableData = useMemo(() => {
     const firstPageIndex = (pageIndex - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
@@ -91,7 +62,7 @@ const UserTable: React.FC = () => {
     }
   };
 
-  // sort the data
+  // sortedData is the data that is sorted by the sort column and sort order
   const sortedData = useSortableTable<User>(tableData, sortColumn, sortOrder);
 
   const sortUsers = (column: keyof User) => {
@@ -104,8 +75,8 @@ const UserTable: React.FC = () => {
       <SearchBar onSearch={(query) => setSearchQuery(query)} />
       <table className={styles.table}>
         <TableHeader
-          headers={originalHeaders}
-          headerMapping={headerMapping}
+          headers={Object.values(UserHeader)}
+          headerMapping={headerUserMapping}
           sortColumn={sortColumn}
           sortOrder={sortOrder}
           onSort={sortUsers}
@@ -115,7 +86,11 @@ const UserTable: React.FC = () => {
           className={styles.table__body}
           onScroll={handleScroll}>
           {sortedData.map((item, index) => (
-            <TableRow key={index} rowData={item} headers={originalHeaders} />
+            <TableRow
+              key={index}
+              rowData={item}
+              headers={Object.values(UserHeader)}
+            />
           ))}
         </tbody>
       </table>

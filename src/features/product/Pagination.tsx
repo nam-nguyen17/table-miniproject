@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { usePagination, DOTS } from "../../../hooks/usePagination";
-import styles from "../../../styles/pagination.module.scss";
+import { DOTS, usePagination } from "../../hooks/usePagination";
+import styles from "../../styles/pagination.module.scss";
 
 interface PaginationProps {
   onPageChange: (page: number) => void;
