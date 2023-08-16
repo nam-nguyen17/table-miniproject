@@ -6,7 +6,7 @@ import SearchBar from "../../components/search/SearchBar";
 import { User } from "../../_types_";
 import { useSortableTable } from "../../hooks/useSortableTable";
 
-let PageSize = 10;
+const PageSize = 10;
 
 const originalHeaders = [
   "customer_id",

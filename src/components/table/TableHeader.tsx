@@ -29,13 +29,15 @@ function TableHeader<T>({
     <thead className={styles.table__header}>
       <tr>
         {headers.map((header) => (
-          <th key={header} className={styles.table__header_list}>
-            {headerMapping[header]}
-            <Button
-              onClick={() => handleClick(header as keyof T)}
-              className={`${sortColumn === header ? "active" : ""}`}>
-              {sortColumn === header && sortOrder === "asc" ? "▲" : "▼"}
-            </Button>
+          <th key={header}>
+            <div>
+              <span>{headerMapping[header]}</span>
+              <Button
+                onClick={() => handleClick(header as keyof T)}
+                className={`${sortColumn === header ? "active" : ""}`}>
+                {sortColumn === header && sortOrder === "asc" ? "▲" : "▼"}
+              </Button>
+            </div>
           </th>
         ))}
       </tr>
