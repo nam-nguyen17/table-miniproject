@@ -53,8 +53,13 @@ const ProductTable: React.FC = () => {
       return productsData;
     }
     const lowerCaseQuery = searchQuery.toLowerCase();
-    return productsData.filter((product) =>
-      product.product_name.toLowerCase().includes(lowerCaseQuery)
+    return productsData.filter(
+      (product) =>
+        product.product_name.toLowerCase().includes(lowerCaseQuery) ||
+        product.category.toLowerCase().includes(lowerCaseQuery) ||
+        product.expiration_date.toLowerCase().includes(lowerCaseQuery) ||
+        product.quantity.toString().includes(lowerCaseQuery) ||
+        product.price.toString().includes(lowerCaseQuery)
     );
   }, [searchQuery, productsData]);
 
