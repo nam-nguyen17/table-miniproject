@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
+import Button from "../button/Button";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -30,9 +31,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         value={searchValue}
         onChange={handleInputChange}
       />
-      <button className={styles.searchBar__button} type="submit">
+      <Button type="submit" className={styles.searchBar__button}>
         Search
-      </button>
+      </Button>
     </form>
   );
 };

@@ -4,6 +4,7 @@ import Pagination from "./components/Pagination";
 import styles from "./components/styles.module.scss";
 import SearchBar from "../../components/search/SearchBar";
 import { Product } from "../../_types_";
+import { useSortableTable } from "../../hooks/useSortableTable";
 
 const PageSize = 10;
 
@@ -29,6 +30,8 @@ const ProductTable: React.FC = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState<keyof Product | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const fetchProductData = async () => {
     try {
@@ -61,13 +64,27 @@ const ProductTable: React.FC = () => {
     return filteredData.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, filteredData]);
 
+  const sortedData = useSortableTable<Product>(
+    currentTableData,
+    sortColumn,
+    sortOrder
+  );
+
+  const sortProducts = (column: keyof Product) => {
+    setSortColumn(column);
+    setSortOrder(sortColumn === column && sortOrder === "asc" ? "desc" : "asc");
+  };
+
   return (
     <div>
       <SearchBar onSearch={(query) => setSearchQuery(query)} />
       <Table
         headers={originalHeaders}
-        data={currentTableData}
+        data={sortedData}
         headerMapping={headerMapping}
+        sortColumn={sortColumn}
+        sortOrder={sortOrder}
+        onSort={sortProducts}
       />
       <Pagination
         className={`${styles.pagination_bar}`}
