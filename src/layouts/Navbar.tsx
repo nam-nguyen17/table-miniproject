@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react'
+import '../styles/globals.scss'
 
 const Navbar: React.FC = () => {
   return (
     <aside>
-      <div>
+      <div className="nav">
         <ul>
           <li>
             <a href="/">Dashboard</a>
@@ -17,7 +18,7 @@ const Navbar: React.FC = () => {
         </ul>
       </div>
     </aside>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
