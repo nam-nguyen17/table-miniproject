@@ -1,9 +1,9 @@
-import React from "react";
-import styles from "./styles.module.scss";
+import React from 'react'
+import styles from './styles.module.scss'
 
 interface TableRowProps {
-  rowData: any;
-  headers: string[];
+  rowData: any
+  headers: string[]
 }
 
 const TableRow: React.FC<TableRowProps> = ({ rowData, headers }) => {
@@ -13,7 +13,7 @@ const TableRow: React.FC<TableRowProps> = ({ rowData, headers }) => {
         <td key={idx}>{rowData[header]}</td>
       ))}
     </tr>
-  );
-};
+  )
+}
 
-export default TableRow;
+export default TableRow

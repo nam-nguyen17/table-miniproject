@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import styles from "./styles.module.scss";
-import Button from "../button/Button";
+import React, { useState } from 'react'
+import styles from './styles.module.scss'
+import Button from '../button/Button'
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
+  onSearch: (query: string) => void
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('')
 
   const handleSearch = () => {
-    onSearch(searchValue);
-  };
+    onSearch(searchValue)
+  }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
+    setSearchValue(event.target.value)
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    handleSearch();
-  };
+    event.preventDefault()
+    handleSearch()
+  }
 
   return (
     <form className={styles.searchBar} onSubmit={handleSubmit}>
@@ -35,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         Search
       </Button>
     </form>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar

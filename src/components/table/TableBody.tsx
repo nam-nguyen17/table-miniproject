@@ -1,10 +1,10 @@
-import React from "react";
-import TableRow from "./TableRow";
-import styles from "./styles.module.scss";
+import React from 'react'
+import TableRow from './TableRow'
+import styles from './styles.module.scss'
 
 interface TableBodyProps {
-  data: any[];
-  headers: string[];
+  data: any[]
+  headers: string[]
 }
 
 const TableBody: React.FC<TableBodyProps> = ({ data, headers }) => {
@@ -14,7 +14,7 @@ const TableBody: React.FC<TableBodyProps> = ({ data, headers }) => {
         <TableRow key={index} rowData={item} headers={headers} />
       ))}
     </tbody>
-  );
-};
+  )
+}
 
-export default TableBody;
+export default TableBody

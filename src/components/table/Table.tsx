@@ -1,15 +1,15 @@
-import React from "react";
-import TableHeader from "./TableHeader";
-import TableBody from "./TableBody";
-import styles from "./styles.module.scss";
+import React from 'react'
+import TableHeader from './TableHeader'
+import TableBody from './TableBody'
+import styles from './styles.module.scss'
 
 interface TableProps<T> {
-  headers: string[];
-  data: T[];
-  headerMapping: Record<string, string>;
-  sortColumn: keyof T | null;
-  sortOrder: "asc" | "desc";
-  onSort: (column: keyof T) => void;
+  headers: string[]
+  data: T[]
+  headerMapping: Record<string, string>
+  sortColumn: keyof T | null
+  sortOrder: 'asc' | 'desc'
+  onSort: (column: keyof T) => void
 }
 
 const Table = <T,>({
@@ -31,7 +31,7 @@ const Table = <T,>({
       />
       <TableBody data={data} headers={headers} />
     </table>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table

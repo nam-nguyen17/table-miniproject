@@ -1,11 +1,11 @@
 export async function fetchData<T>(url: string): Promise<T[]> {
   try {
-    const response = await fetch(url);
-    const data: T[] = await response.json();
-    return data;
+    const response = await fetch(url)
+    const data: T[] = await response.json()
+    return data
   } catch (error) {
-    console.error(`Error fetching data from ${url}:`, error);
-    return [];
+    console.error(`Error fetching data from ${url}:`, error)
+    return []
   }
 }
 
@@ -15,13 +15,13 @@ export function filterData<T extends Record<string, any>>(
   filters: (keyof T)[]
 ): T[] {
   if (!searchQuery) {
-    return data;
+    return data
   }
 
-  const lowerCaseQuery = searchQuery.toLowerCase();
+  const lowerCaseQuery = searchQuery.toLowerCase()
   return data.filter((item) =>
     filters.some((key) =>
       String(item[key]).toLowerCase().includes(lowerCaseQuery)
     )
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/Home";
-import UserPage from "./pages/Users";
-import ProductPage from "./pages/Products";
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import HomePage from './pages/Home'
+import UserPage from './pages/Users'
+import ProductPage from './pages/Products'
 
 const App: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const App: React.FC = () => {
         <Route path="/products" element={<ProductPage />} />
       </Routes>
     </Router>
-  );
-};
+  )
+}
 
-export default App;
+export default App

@@ -1,13 +1,13 @@
-import React from "react";
-import styles from "./styles.module.scss";
-import Button from "../button/Button";
+import React from 'react'
+import styles from './styles.module.scss'
+import Button from '../button/Button'
 
 interface TableHeaderProps<T> {
-  headers: string[];
-  headerMapping: Record<string, string>;
-  sortColumn: keyof T | null;
-  sortOrder: "asc" | "desc";
-  onSort: (column: keyof T) => void;
+  headers: string[]
+  headerMapping: Record<string, string>
+  sortColumn: keyof T | null
+  sortOrder: 'asc' | 'desc'
+  onSort: (column: keyof T) => void
 }
 
 function TableHeader<T>({
@@ -19,11 +19,11 @@ function TableHeader<T>({
 }: TableHeaderProps<T>) {
   const handleClick = (header: keyof T) => {
     if (sortColumn === header) {
-      onSort(header);
+      onSort(header)
     } else {
-      onSort(header);
+      onSort(header)
     }
-  };
+  }
 
   return (
     <thead className={styles.table__header}>
@@ -34,15 +34,16 @@ function TableHeader<T>({
               <span>{headerMapping[header]}</span>
               <Button
                 onClick={() => handleClick(header as keyof T)}
-                className={`${sortColumn === header ? "active" : ""}`}>
-                {sortColumn === header && sortOrder === "asc" ? "▲" : "▼"}
+                className={`${sortColumn === header ? 'active' : ''}`}
+              >
+                {sortColumn === header && sortOrder === 'asc' ? '▲' : '▼'}
               </Button>
             </div>
           </th>
         ))}
       </tr>
     </thead>
-  );
+  )
 }
 
-export default TableHeader;
+export default TableHeader
