@@ -9,7 +9,7 @@ export async function fetchData<T>(url: string): Promise<T[]> {
   }
 }
 
-export function filterData<T extends Record<string, any>>(
+export function filterData<T>(
   data: T[],
   searchQuery: string,
   filters: (keyof T)[]
